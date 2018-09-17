@@ -9,7 +9,7 @@ passwordRegex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$')
 
 app = Flask(__name__)
 app.secret_key = 'ThisIsSecret'
-mysql = connectToMySQL
+
 # invoke the connectToMySQL function and pass it the name of the database we're using
 # connectToMySQL returns an instance of MySQLConnection, which we will store in the variable 'mysql'
 
@@ -34,7 +34,6 @@ def check():
         data = {
             'email' : request.form['email']
         }
-        mysql = connectToMySQL("email_validation") # we MUST put this before...
         mysql.query_db(query, data) #We put this beacause it opens the db and takes the info and closes it each time.
         
         session['email'] = request.form['email']
@@ -46,7 +45,7 @@ def check():
 def success():
     query = ('SELECT emails.id, emails.email, emails.dateadded FROM emails')
    
-    mysql = connectToMySQL("email_validation")
+    
     emails = mysql.query_db(query)
     
     return render_template('success.html', emails=emails)
